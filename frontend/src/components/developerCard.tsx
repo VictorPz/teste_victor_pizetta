@@ -3,42 +3,59 @@ import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { LuCheck, LuX } from "react-icons/lu"
 
-const developerCard = () => {
+type CustomCardProps = {
+    key: number;
+    name: string;
+    level: string;
+    sexo: string;
+    birth_date: string;
+    hobby: string;
+    onEdit: () => void;
+    onDelete: () => void;
+};
+
+const DeveloperCard = ({ name, level, sexo, birth_date, hobby, onEdit, onDelete }: CustomCardProps) => {
     return (
-        <Card.Root width="320px">
+        <Card.Root width="325px" m='10px'>
             <Card.Body>
                 <HStack mb="6" gap="3">
                     <Avatar
-                        src="https://images.unsplash.com/photo-1511806754518-53bada35f930"
-                        name="Nate Foss"
+                        src='../assets/dev.jpg'
+                        name='developer img'
                     />
                     <Stack gap="0">
                         <Text fontWeight="semibold" textStyle="sm">
-                            Nate Foss
+                            {name}
                         </Text>
                         <Text color="fg.muted" textStyle="sm">
-                            @natefoss
+                            {level}
                         </Text>
                     </Stack>
                 </HStack>
                 <Card.Description>
-                    <Strong color="fg">Nate Foss </Strong>
-                    has requested to join your team. You can approve or decline their
-                    request.
+                    <Strong color="fg">{name}. </Strong>
+                    <br></br>
+                    Desenvolvedor {level}
+                    <br></br>
+                    Sexo: {sexo}.
+                    <br></br>
+                    Data de nascimento: {birth_date}.
+                    <br></br>
+                    Principal hobby: {hobby}
                 </Card.Description>
             </Card.Body>
             <Card.Footer>
-                <Button variant="subtle" colorPalette="red" flex="1">
-                    <LuX />
-                    Decline
-                </Button>
-                <Button variant="subtle" colorPalette="blue" flex="1">
+                <Button variant="subtle" colorPalette="blue" flex="1" onClick={onEdit}>
                     <LuCheck />
-                    Approve
+                    Editar
+                </Button>
+                <Button variant="subtle" colorPalette="red" flex="1" onClick={onDelete}>
+                    <LuX />
+                    Excluir
                 </Button>
             </Card.Footer>
         </Card.Root>
     )
 }
 
-export default developerCard;
+export default DeveloperCard;

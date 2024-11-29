@@ -72,7 +72,8 @@ const MainPage = () => {
           borderBottomRadius='8px'
           borderTopRightRadius='8px'
           backgroundColor='gray.800'
-          h='85%'>
+          overflowY="auto"
+          h='95%'>
           <TabPanel>
             {/* Renderiza a página de Desenvolvedores dentro da aba */}
             <DeveloperPage />
