@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Nivel extends Model
+class Level extends Model
 {
     protected $fillable = [
         'nivel',
     ];
 
     protected $table = 'niveis';
+    public $timestamps = false;
 
     // one to many - um nível pode ter muitos desenvolvedores
     public function desenvolvedores()
     {
-        return $this->hasMany(Desenvolvedor::class, 'nivel_id', 'id');
+        return $this->hasMany(Developer::class, 'nivel_id', 'id');
     }
-
-    // Ocultar o que for definido na resposta em json
-    protected $hidden = ['id'];
 }

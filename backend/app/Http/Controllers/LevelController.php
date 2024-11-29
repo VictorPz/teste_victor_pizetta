@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Level;
+use App\Http\Requests\LevelFormValidator;
+use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isEmpty;
+
+class LevelController extends Controller
+{
+    // Criar um novo nível
+    public function store(LevelFormValidator $request)
+    {
+        $level = Level::create(['nivel' => $request->nivel]);
+        return response()->json($level, 201);
+    }
+
+    // Listar todos os níveis
+    public function listLevels()
+    {
+        $level = Level::all();
+
+        if ($level->isEmpty()) {
+            return response()->json(['message' => 'Nenhum nível encontrado'], 400);
+        }
+
+        return response()->json($level);
+    }
+
+    // Atualizar um nível existente
+    public function updateLevels(LevelFormValidator $request, $id)
+    {
+        $level = Level::find($id);
+
+        if (!$level) {
+            return response()->json(['message' => 'Nível não encontrado'], 400);
+        }
+
+        $level->update(['nivel' => $request->nivel]);
+
+        return response()->json($level);
+    }
+
+    // Deletar um nível
+    public function excludeLevels($id)
+    {
+        $level = Level::find($id);
+
+        if (!$level) {
+            return response()->json(['message' => 'Nível não encontrado'], 400);
+        }
+
+        // Verifica se existem desenvolvedores associados ao nível a ser deletado
+        if ($level->desenvolvedores()->exists()) {
+            return response()->json(['message' => 'Não é possível excluir. Existem desenvolvedores associados a este nível.'], 400);
+        }
+
+        $level->delete();
+
+        if ($level::count() == 0) {
+            DB::statement('ALTER TABLE niveis AUTO_INCREMENT = 1');
+        }
+
+        return response()->json(['message' => 'Nível excluído com sucesso']);
+    }
+}
+
