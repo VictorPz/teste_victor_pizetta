@@ -5,6 +5,7 @@ import { Box, Table, Input, Text} from '@chakra-ui/react';
 import CustomModal from '@/components/CustomModal';
 import { useDisclosure } from '@chakra-ui/hooks'
 import GenericButton from '@/components/GenericButton';
+import { LuArrowUpDown } from 'react-icons/lu';
 // import { ArrowUpIcon, ArrowDownIcon, Icon } from '@chakra-ui/icons';
 
 type Level = {
@@ -21,11 +22,22 @@ const mockLevels: Level[] = [
 
 const LevelPage = () => {
     const [levels, setLevels] = useState<Level[]>(mockLevels);
+
+    //Ordenamento Colunas
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null); // Estado para armazenar a direção da ordenação
     const [sortColumn, setSortColumn] = useState<string | null>(null); // Estado para a coluna ordenada
+
+    //Modal Edição
     const [editingLevel, setEditingLevel] = useState<Level | null>(null); // Estado para edição
     const [newName, setNewName] = useState<string>(''); // Estado para o novo nome do nível
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    //Modal Adicionar Nivel
+    const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
+    const [newLevelName, setNewLevelName] = useState<string>('');
+    const [newDevelopersCount, setNewDevelopersCount] = useState<number>(0);
+
+    //Barra Busca
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const filteredLevels = levels.filter(level =>
@@ -75,14 +87,18 @@ const LevelPage = () => {
 
     return (
         <Box
-            h='100%'
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
             p='25px'
-            display='block'
+            gap='4'
         >
             <Box
                 display='flex'
                 justifyContent='space-between'
                 gap='20'
+                w='95%'
             >
                 <Input
                     placeholder="Buscar nível..."
@@ -94,10 +110,10 @@ const LevelPage = () => {
                     color='black'
                     _placeholder={{color: 'black'}}
                 />
-                <GenericButton size='lg' variant='subtle' title="Adicionar Nível" color="blue" onClick={() => 'lul'} />
+                <GenericButton size='lg' variant='subtle' title="Adicionar Nível" color="blue" onClick={onAddOpen} />
             </Box>
             <Table.Root
-                w='80%'
+                w='95%'
                 stickyHeader
                 interactive>
                 <Table.Header>
@@ -106,13 +122,19 @@ const LevelPage = () => {
                             onClick={() => handleSort('name')}
                             cursor="pointer"
                         >
-                            Niveis
+                            <Box display='flex' alignItems='center' gap='3'>
+                                Niveis
+                                <LuArrowUpDown />
+                            </Box>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader
                             onClick={() => handleSort('developersCount')}
                             cursor="pointer"
                         >
-                            Qt Desenvolvedores
+                            <Box display='flex' alignItems='center' gap='3'>
+                                Desenvolvedores Associados
+                                <LuArrowUpDown />
+                            </Box>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader>Ações</Table.ColumnHeader>
                     </Table.Row>
@@ -123,7 +145,7 @@ const LevelPage = () => {
                             <Table.Cell>{item.name}</Table.Cell>
                             <Table.Cell>{item.developersCount}</Table.Cell>
                             <Table.Cell>
-                                <GenericButton size='sm' variant='ghost' title="Editar" color="blue" onClick={() => handleEdit(item)} />
+                                <GenericButton size='sm' variant='subtle' title="Editar" color="blue" onClick={() => handleEdit(item)} />
                                 <GenericButton size='sm' variant='ghost' title="Excluir" color="red" onClick={() => handleDelete(item.id)} />
                             </Table.Cell>
                         </Table.Row>
@@ -131,7 +153,7 @@ const LevelPage = () => {
                 </Table.Body>
             </Table.Root>
 
-            {/* Modal */}
+            {/* Modal Editar Nivel */}
             <CustomModal
                 title="Editar Nível"
                 isOpen={isOpen}
@@ -150,6 +172,40 @@ const LevelPage = () => {
                     ) : (
                         <Text>Selecione um nível para editar.</Text>
                     )
+                }
+            />
+
+            {/* Modal Adicionar Nivel*/}
+            <CustomModal
+                title="Cadastrar Novo Nível"
+                isOpen={isAddOpen}
+                onClose={() => {
+                    setNewLevelName('');
+                    setNewDevelopersCount(0);
+                    onAddClose();
+                }}
+                onSave={() => {
+                    if (newLevelName.trim()) {
+                        const newLevel: Level = {
+                            id: levels.length + 1, // Gera um ID único
+                            name: newLevelName,
+                            developersCount: newDevelopersCount,
+                        };
+                        setLevels([...levels, newLevel]);
+                        setNewLevelName('');
+                        setNewDevelopersCount(0);
+                        onAddClose();
+                    }
+                }}
+                body={
+                    <>
+                        <Text mb='4px'>Nome do Nível:</Text>
+                        <Input
+                            value={newLevelName}
+                            onChange={(e) => setNewLevelName(e.target.value)}
+                            placeholder="Digite o nome do nível"
+                        />
+                    </>
                 }
             />
         </Box>

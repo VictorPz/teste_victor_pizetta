@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react';
-import { Stack, Box, Button, Text, Input} from '@chakra-ui/react';
+import { Stack, Box, Text, Input} from '@chakra-ui/react';
 import DeveloperCard from '@/components/DeveloperCard';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/modal';
 import { useDisclosure } from '@chakra-ui/hooks'
 import GenericButton from '@/components/GenericButton';
+import CustomModal from '@/components/CustomModal';
 
 
 type Developer = {
@@ -28,14 +28,20 @@ const mockDevelopers: Developer[] = [
     { id: 8, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
     { id: 9, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
     { id: 10, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 11, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
 ];
 
 const DeveloperPage = () => {
+    //barra busca
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    //modal edit dev
     const [developers, setDevelopers] = useState(mockDevelopers);
     const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    //modal add dev
+    const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
+    const [newDeveloper, setNewDeveloper] = useState<Developer | null>(null);
 
     const filteredDevelopers = developers.filter(dev =>
         dev.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -86,7 +92,7 @@ const DeveloperPage = () => {
                     color='black'
                     _placeholder={{ color: 'black' }}
                 />
-                <GenericButton size='lg' variant='subtle' title="Adicionar Desenvolvedor" color="blue" onClick={() => 'lul'} />
+                <GenericButton size='lg' variant='subtle' title="Adicionar Desenvolvedor" color="blue" onClick={onAddOpen} />
             </Box>
             <Stack
             direction='row'
@@ -108,89 +114,109 @@ const DeveloperPage = () => {
                 ))}
             </Stack>
 
-            {/* Modal para editar */}
-            <Modal
-            isOpen={isOpen}
-            onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent
-                border='solid'
-                borderColor='green'
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
-                h='100dvh'
-                w='100dvw'
-                >
-                    <ModalHeader
-                    backgroundColor='#0039f7'
-                    w='300px'
-                    display='flex'
-                    justifyContent='space-between'
-                    pt='10px'
-                    pb='10px'
-                    paddingInline='15px'
-                    >
-                        Editar Desenvolvedor
-                        <ModalCloseButton/>
-                    </ModalHeader>
+            {/* Modal editar Dev */}
+            <CustomModal
+                title="Editar Desenvolvedor"
+                isOpen={isOpen}
+                onClose={onClose}
+                onSave={() => handleSaveEdit(
+                        (document.getElementById('name') as HTMLInputElement).value,
+                        (document.getElementById('level') as HTMLInputElement).value,
+                        (document.getElementById('sexo') as HTMLInputElement).value,
+                        (document.getElementById('birth_date') as HTMLInputElement).value,
+                        (document.getElementById('hobby') as HTMLInputElement).value,
+                    )}
+                body={
+                    selectedDeveloper && (
+                        <>
+                            <Text mb='4px'>Nome:</Text>
+                            <Input
+                                type="text"
+                                defaultValue={selectedDeveloper.name}
+                                id="name"
+                            />
 
-                    <ModalBody
-                    border='solid'
-                    borderColor='blue'
-                    backgroundColor='white'
-                    w='300px'
-                    p='34px'
-                    >
-                        {selectedDeveloper && (
-                            <>
-                                <Text>Nome:</Text>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedDeveloper.name}
-                                    id="name"
-                                />
-                                <Text>Nivel:</Text>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedDeveloper.level}
-                                    id="level"
-                                />
-                                <Text>Sexo:</Text>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedDeveloper.sexo}
-                                    id="sexo"
-                                />
-                                <Text>Data de Nascimento:</Text>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedDeveloper.birth_date}
-                                    id="birth_date"
-                                />
-                                <Text>Hobby:</Text>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedDeveloper.hobby}
-                                    id="hobby"
-                                />
-                            </>
-                        )}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme="blue" onClick={() =>
-                            handleSaveEdit(
-                                (document.getElementById('name') as HTMLInputElement).value,
-                                (document.getElementById('level') as HTMLInputElement).value,
-                                (document.getElementById('sexo') as HTMLInputElement).value,
-                                (document.getElementById('birth_date') as HTMLInputElement).value,
-                                (document.getElementById('hobby') as HTMLInputElement).value,
-                            )}>Salvar</Button>
-                        <Button variant="outline" onClick={onClose}>Cancelar</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                            <Text mb='4px' mt='10px'>Nivel:</Text>
+                            <Input
+                                type="text"
+                                defaultValue={selectedDeveloper.level}
+                                id="level"
+                            />
+
+                            <Text mb='4px' mt='10px'>Sexo:</Text>
+                            <Input
+                                type="text"
+                                defaultValue={selectedDeveloper.sexo}
+                                id="sexo"
+                            />
+
+                            <Text mb='4px' mt='10px'>Data de Nascimento:</Text>
+                            <Input
+                                type="text"
+                                defaultValue={selectedDeveloper.birth_date}
+                                id="birth_date"
+                            />
+
+                            <Text mb='4px' mt='10px'>Hobby:</Text>
+                            <Input
+                                type="text"
+                                defaultValue={selectedDeveloper.hobby}
+                                id="hobby"
+                            />
+                        </>
+                    )
+                }
+            />
+
+            {/*Modal Add Dev*/}
+            <CustomModal
+                title="Cadastrar Desenvolvedor"
+                isOpen={isAddOpen}
+                onClose={onAddClose}
+                onSave={() => {
+                    if (newDeveloper) {
+                        setDevelopers([...developers, { ...newDeveloper, id: developers.length + 1 }]);
+                        onAddClose();
+                    }
+                }}
+                body={
+                    <>
+                        <Text mb='4px'>Nome:</Text>
+                        <Input
+                            type="text"
+                            placeholder="Digite o nome"
+                            onChange={(e) => setNewDeveloper((prev) => ({ ...prev, name: e.target.value } as Developer))}
+                        />
+
+                        <Text mb='4px' mt='10px'>Nível:</Text>
+                        <Input
+                            type="text"
+                            placeholder="Digite o nível"
+                            onChange={(e) => setNewDeveloper((prev) => ({ ...prev, level: e.target.value } as Developer))}
+                        />
+
+                        <Text mb='4px' mt='10px'>Sexo:</Text>
+                        <Input
+                            type="text"
+                            placeholder="Digite o sexo"
+                            onChange={(e) => setNewDeveloper((prev) => ({ ...prev, sexo: e.target.value } as Developer))}
+                        />
+
+                        <Text mb='4px' mt='10px'>Data de Nascimento:</Text>
+                        <Input
+                            type="date"
+                            onChange={(e) => setNewDeveloper((prev) => ({ ...prev, birth_date: e.target.value } as Developer))}
+                        />
+
+                        <Text mb='4px' mt='10px'>Hobby:</Text>
+                        <Input
+                            type="text"
+                            placeholder="Digite o hobby"
+                            onChange={(e) => setNewDeveloper((prev) => ({ ...prev, hobby: e.target.value } as Developer))}
+                        />
+                    </>
+                }
+            />
         </Box>
     );
 };
