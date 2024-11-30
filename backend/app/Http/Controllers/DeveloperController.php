@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\DeveloperFormValidator;
 use App\Models\Developer;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\DB;
 
 class DeveloperController extends Controller
@@ -23,14 +23,51 @@ class DeveloperController extends Controller
     }
 
     //Listar devs
-    public function listDevs() {
-        $developers = Developer::with('nivel')->get(); //sem o with('nivel') retorna apenas o id do nível e não o nome.
+    public function listDevs(DeveloperFormValidator $request) {
+
+        $nome = $request->input('nome');
+        $sexo = $request->input('sexo');
+        $data_nascimento = $request->input('nascimento');
+        $hobby = $request->input('hobby');
+        $nivelId = $request->input('nivel_id');
+
+        $perPage = $request->input('per_page', 10);
+
+        $query = Developer::with('nivel'); //sem o with('nivel') retorna apenas o id do nível e não o nome.
+
+        if ($nome) {
+            $query->where('nome', 'like', '%' . $nome . '%');
+        }
+        if ($sexo) {
+            $query->where('sexo', $sexo);
+        }
+
+        if ($data_nascimento) {
+            $query->where('nascimento', 'like', '%' . $data_nascimento . '%');
+        }
+
+        if ($hobby) {
+            $query->where('hobby', 'like', '%' . $hobby . '%');
+        }
+
+        if ($nivelId) {
+            $query->where('nivel_id', $nivelId);
+        }
+
+        $developers = $query->paginate($perPage);
 
         if ($developers->isEmpty()) {
             return response()->json(['message' => 'Nenhum desenvolvedor encontrado'], 400);
         }
 
-        return response()->json($developers, 200);
+        return response()->json([
+            'data' => $developers->items(),
+            'meta' => [
+                'total' => $developers->total(),
+                'per_page' => $developers->perPage(),
+                'current_page' => $developers->currentPage(),
+                'last_page' => $developers->lastPage(),
+            ]], 200);
     }
 
     //Editar devs
@@ -44,7 +81,14 @@ class DeveloperController extends Controller
 
         $developer->update($request->only(['nome', 'sexo', 'data_nascimento', 'hobby', 'nivel_id']));
 
-        return response()->json($developer);
+        return response()->json([
+            'id' => $developer->id,
+            'nome' => $developer->nome,
+            'sexo' => $developer->sexo,
+            'data_nascimento' => $developer->data_nascimento,
+            'nivel_id' => $developer->nivel_id,
+            'hobby' => $developer->hobby,
+        ]);
     }
 
     //Excluir devs

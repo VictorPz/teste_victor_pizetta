@@ -18,15 +18,32 @@ class LevelController extends Controller
     }
 
     // Listar todos os níveis
-    public function listLevels()
+    public function listLevels(LevelFormValidator $request)
     {
-        $level = Level::all();
+        //Query por parâmetro
+        $searchTerm = $request->input('nivel');
+
+        $query = Level::query();
+
+        if ($searchTerm) {
+            $query->where('nivel', 'like', '%' . $searchTerm . '%');
+        }
+
+        $level = $query->paginate(10);
 
         if ($level->isEmpty()) {
             return response()->json(['message' => 'Nenhum nível encontrado'], 400);
         }
 
-        return response()->json($level);
+        return response()->json([
+            'data' => $level->items(),
+            'meta' => [
+                'total' => $level->total(),
+                'per_page' => $level->perPage(),
+                'current_page' => $level->currentPage(),
+                'last_page' => $level->lastPage(),
+            ]
+        ], 200);
     }
 
     // Atualizar um nível existente

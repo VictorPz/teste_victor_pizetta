@@ -20,8 +20,14 @@ class LevelFormValidator extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->isMethod('get')) {
+            return [
+                'nivel' => 'nullable|string|max:255',
+            ];
+        }
+
         return [
-            'nivel' => 'required|string|unique:niveis|max:255|'
+            'nivel' => 'required|string|unique:niveis|max:255|',
         ];
     }
 
