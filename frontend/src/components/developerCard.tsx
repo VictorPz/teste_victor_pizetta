@@ -1,7 +1,6 @@
 import { Card, HStack, Stack, Strong, Text } from "@chakra-ui/react"
 import { Avatar } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { LuCheck, LuX } from "react-icons/lu"
+import GenericButton from '@/components/GenericButton';
 
 type CustomCardProps = {
     key: number;
@@ -45,14 +44,8 @@ const DeveloperCard = ({ name, level, sexo, birth_date, hobby, onEdit, onDelete 
                 </Card.Description>
             </Card.Body>
             <Card.Footer>
-                <Button variant="subtle" colorPalette="blue" flex="1" onClick={onEdit}>
-                    <LuCheck />
-                    Editar
-                </Button>
-                <Button variant="subtle" colorPalette="red" flex="1" onClick={onDelete}>
-                    <LuX />
-                    Excluir
-                </Button>
+                <GenericButton size='md' variant='subtle' title="Editar" color="blue" onClick={onEdit} />
+                <GenericButton size='md' variant='outline' title="Excluir" color="red" onClick={onDelete}/>
             </Card.Footer>
         </Card.Root>
     )

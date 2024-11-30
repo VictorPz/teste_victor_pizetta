@@ -11,8 +11,6 @@ const MainPage = () => {
   return (
     // pai
     <Box
-      border='solid'
-      borderColor='red'
       borderRadius='10px'
       backgroundColor='gray.800'
       display='flex'
@@ -78,9 +76,9 @@ const MainPage = () => {
             {/* Renderiza a página de Desenvolvedores dentro da aba */}
             <DeveloperPage />
           </TabPanel>
-          <TabPanel>
+          <TabPanel h='100%'>
             {/* Renderiza a página de Níveis dentro da aba */}
-            <LevelPage />
+            <LevelPage/>
           </TabPanel>
         </TabPanels>
       </Tabs>

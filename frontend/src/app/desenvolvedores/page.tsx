@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react';
-import { Stack, Box, Button, Text} from '@chakra-ui/react';
-import {Card, CardBody} from '@chakra-ui/card'
+import { Stack, Box, Button, Text, Input} from '@chakra-ui/react';
 import DeveloperCard from '@/components/DeveloperCard';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/modal';
 import { useDisclosure } from '@chakra-ui/hooks'
+import GenericButton from '@/components/GenericButton';
 
 
 type Developer = {
@@ -35,6 +35,11 @@ const DeveloperPage = () => {
     const [developers, setDevelopers] = useState(mockDevelopers);
     const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const filteredDevelopers = developers.filter(dev =>
+        dev.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const handleEdit = (developer: Developer) => {
         setSelectedDeveloper(developer);
@@ -58,26 +63,47 @@ const DeveloperPage = () => {
 
     return (
         <Box
-            border='solid'
-            borderColor='blue'
-            p='15px'
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            p='25px'
+            gap='4'
             >
+            <Box
+                display='flex'
+                justifyContent='space-between'
+                gap='20'
+                w='95%'
+            >
+                <Input
+                    placeholder="Buscar desenvolvedor..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Atualiza o estado com o valor da busca
+                    w='80%'
+                    cursor='text'
+                    backgroundColor='whiteAlpha.500'
+                    color='black'
+                    _placeholder={{ color: 'black' }}
+                />
+                <GenericButton size='lg' variant='subtle' title="Adicionar Desenvolvedor" color="blue" onClick={() => 'lul'} />
+            </Box>
             <Stack
             direction='row'
             wrap='wrap'
             display='flex'
             alignItems='flex-start'
             >
-                {developers.map((developer) => (
+                {filteredDevelopers.map((developer) => (
                     <DeveloperCard
-                    key={developer.id}
-                    name={developer.name}
-                    level={developer.level}
-                    sexo={developer.sexo}
-                    birth_date={developer.birth_date}
-                    hobby={developer.hobby}
-                    onEdit={() => handleEdit(developer)}
-                    onDelete={() => handleDelete(developer.id)}
+                        key={developer.id}
+                        name={developer.name}
+                        level={developer.level}
+                        sexo={developer.sexo}
+                        birth_date={developer.birth_date}
+                        hobby={developer.hobby}
+                        onEdit={() => handleEdit(developer)}
+                        onDelete={() => handleDelete(developer.id)}
                     />
                 ))}
             </Stack>
