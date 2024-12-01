@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\DeveloperFormValidator;
 use App\Models\Developer;
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\DB;
 
 class DeveloperController extends Controller
@@ -27,7 +26,7 @@ class DeveloperController extends Controller
 
         $nome = $request->input('nome');
         $sexo = $request->input('sexo');
-        $data_nascimento = $request->input('nascimento');
+        $data_nascimento = $request->input('data_nascimento');
         $hobby = $request->input('hobby');
         $nivelId = $request->input('nivel_id');
 
@@ -43,7 +42,7 @@ class DeveloperController extends Controller
         }
 
         if ($data_nascimento) {
-            $query->where('nascimento', 'like', '%' . $data_nascimento . '%');
+            $query->whereDate('data_nascimento', '=', $data_nascimento);
         }
 
         if ($hobby) {

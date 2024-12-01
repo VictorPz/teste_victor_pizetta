@@ -33,10 +33,13 @@ class LevelFormValidator extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        $errors = $validator->errors();
+        // Aqui você pode capturar os nomes dos campos que falharam
+        $failedFields = implode(', ', array_keys($errors->toArray()));
         throw new HttpResponseException(
             response()->json([
-                'message' => 'Por favor preencha corretamente os campos',
-                'errors' => $validator->errors(),
+                'message' => 'Por favor preencha corretamente o(s) campo(s): ' . $failedFields,
+                'errors' => $errors,
             ], 400)
         );
     }

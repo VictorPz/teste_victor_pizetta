@@ -8,12 +8,13 @@ type CustomCardProps = {
     level: string;
     sexo: string;
     birth_date: string;
+    idade: number;
     hobby: string;
     onEdit: () => void;
     onDelete: () => void;
 };
 
-const DeveloperCard = ({ name, level, sexo, birth_date, hobby, onEdit, onDelete }: CustomCardProps) => {
+const DeveloperCard = ({ name, level, sexo, birth_date, idade, hobby, onEdit, onDelete }: CustomCardProps) => {
     return (
         <Card.Root width="325px" m='10px'>
             <Card.Body>
@@ -39,6 +40,8 @@ const DeveloperCard = ({ name, level, sexo, birth_date, hobby, onEdit, onDelete 
                     Sexo: {sexo}
                     <br></br>
                     Data de nascimento: {birth_date}
+                    <br></br>
+                    Idade: {idade}
                     <br></br>
                     Principal hobby: {hobby}
                 </Card.Description>
