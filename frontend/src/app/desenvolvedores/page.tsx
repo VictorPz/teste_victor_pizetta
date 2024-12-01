@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { Stack, Box, Text, Input} from '@chakra-ui/react';
+import { Stack, Box, Text, Input } from '@chakra-ui/react';
 import DeveloperCard from '@/components/DeveloperCard';
 import { useDisclosure } from '@chakra-ui/hooks'
 import GenericButton from '@/components/GenericButton';
@@ -18,28 +18,28 @@ type Developer = {
 };
 
 const mockDevelopers: Developer[] = [
-    { id: 1, name: 'João', level: 'Junior', sexo: 'M', birth_date: '10/10/1990', hobby: 'Futebol'},
-    { id: 2, name: 'Maria', level: 'Pleno', sexo: 'F', birth_date: '13/05/1998', hobby: 'Leitura'},
-    { id: 3, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 4, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 5, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 6, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 7, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 8, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 9, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
-    { id: 10, name: 'Pedro', level: 'Sênior',sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 1, name: 'João', level: 'Junior', sexo: 'M', birth_date: '10/10/1990', hobby: 'Futebol' },
+    { id: 2, name: 'Maria', level: 'Pleno', sexo: 'F', birth_date: '13/05/1998', hobby: 'Leitura' },
+    { id: 3, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 4, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 5, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 6, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 7, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 8, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 9, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
+    { id: 10, name: 'Pedro', level: 'Sênior', sexo: 'M', birth_date: '15/02/1996', hobby: 'Games' },
 ];
 
 const DeveloperPage = () => {
-    //barra busca
+    //Barra busca
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    //modal edit dev
+    //Modal edit dev
     const [developers, setDevelopers] = useState(mockDevelopers);
     const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    //modal add dev
+    //Modal add dev
     const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
     const [newDeveloper, setNewDeveloper] = useState<Developer | null>(null);
 
@@ -47,14 +47,12 @@ const DeveloperPage = () => {
         dev.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    //Modal confirmam exclusão
+    const { isOpen: isModalExcOpen, onOpen: onModalExcOpen, onClose: onModalExcClose } = useDisclosure();
+
     const handleEdit = (developer: Developer) => {
         setSelectedDeveloper(developer);
         onOpen();
-    };
-
-    const handleDelete = (id: number) => {
-        const updatedDevelopers = developers.filter(dev => dev.id !== id);
-        setDevelopers(updatedDevelopers);
     };
 
     const handleSaveEdit = (name: string, level: string, sexo: string, birth_date: string, hobby: string) => {
@@ -67,6 +65,11 @@ const DeveloperPage = () => {
         }
     };
 
+    const confirmDelete = () => {
+        alert('Deletado!')
+        onModalExcClose();
+    };
+
     return (
         <Box
             display='flex'
@@ -75,7 +78,7 @@ const DeveloperPage = () => {
             justifyContent='center'
             p='25px'
             gap='4'
-            >
+        >
             <Box
                 display='flex'
                 justifyContent='space-between'
@@ -95,10 +98,10 @@ const DeveloperPage = () => {
                 <GenericButton size='lg' variant='subtle' title="Adicionar Desenvolvedor" color="blue" onClick={onAddOpen} />
             </Box>
             <Stack
-            direction='row'
-            wrap='wrap'
-            display='flex'
-            alignItems='flex-start'
+                direction='row'
+                wrap='wrap'
+                display='flex'
+                alignItems='flex-start'
             >
                 {filteredDevelopers.map((developer) => (
                     <DeveloperCard
@@ -109,10 +112,21 @@ const DeveloperPage = () => {
                         birth_date={developer.birth_date}
                         hobby={developer.hobby}
                         onEdit={() => handleEdit(developer)}
-                        onDelete={() => handleDelete(developer.id)}
+                        onDelete={onModalExcOpen}
                     />
                 ))}
             </Stack>
+
+            {/* Modal Confirmar exclusão */}
+            <CustomModal
+                title="Atenção!"
+                isOpen={isModalExcOpen}
+                onClose={onModalExcClose}
+                onSave={confirmDelete}
+                body={
+                    <Text>Tem certeza que deseja remover PERMANENTEMENTE o desenvolvedor selecionado?</Text>
+                }
+            />
 
             {/* Modal editar Dev */}
             <CustomModal
@@ -120,12 +134,12 @@ const DeveloperPage = () => {
                 isOpen={isOpen}
                 onClose={onClose}
                 onSave={() => handleSaveEdit(
-                        (document.getElementById('name') as HTMLInputElement).value,
-                        (document.getElementById('level') as HTMLInputElement).value,
-                        (document.getElementById('sexo') as HTMLInputElement).value,
-                        (document.getElementById('birth_date') as HTMLInputElement).value,
-                        (document.getElementById('hobby') as HTMLInputElement).value,
-                    )}
+                    (document.getElementById('name') as HTMLInputElement).value,
+                    (document.getElementById('level') as HTMLInputElement).value,
+                    (document.getElementById('sexo') as HTMLInputElement).value,
+                    (document.getElementById('birth_date') as HTMLInputElement).value,
+                    (document.getElementById('hobby') as HTMLInputElement).value,
+                )}
                 body={
                     selectedDeveloper && (
                         <>
@@ -222,4 +236,3 @@ const DeveloperPage = () => {
 };
 
 export default DeveloperPage;
-
