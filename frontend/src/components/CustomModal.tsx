@@ -4,13 +4,14 @@ import GenericButton from '@/components/GenericButton';
 
 interface CustomModalProps {
     title: string;
+    mainButtonTitle: string;
     body: React.ReactNode;
     isOpen: boolean;
     onClose: () => void;
     onSave: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ title, body, isOpen, onClose, onSave }) => {
+const CustomModal: React.FC<CustomModalProps> = ({ title, mainButtonTitle, body, isOpen, onClose, onSave }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -58,7 +59,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ title, body, isOpen, onClose,
                     gap='8'
                     mt='25px'
                     >
-                        <GenericButton size='sm' variant='subtle' title="Salvar" color="blue" onClick={onSave} />
+                        <GenericButton size='sm' variant='subtle' title={mainButtonTitle} color="blue" onClick={onSave} />
                         <GenericButton size='sm' variant='outline' title="Cancelar" color="red" onClick={onClose} />
                     </Box>
                 </ModalBody>

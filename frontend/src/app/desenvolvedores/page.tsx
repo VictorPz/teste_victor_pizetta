@@ -39,17 +39,7 @@ const DeveloperPage = () => {
     const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    //Modal add dev
-    const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
-    const [newDeveloper, setNewDeveloper] = useState<Developer | null>(null);
-
-    const filteredDevelopers = developers.filter(dev =>
-        dev.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    //Modal confirmam exclusão
-    const { isOpen: isModalExcOpen, onOpen: onModalExcOpen, onClose: onModalExcClose } = useDisclosure();
-
+    //Edit handlers
     const handleEdit = (developer: Developer) => {
         setSelectedDeveloper(developer);
         onOpen();
@@ -65,6 +55,18 @@ const DeveloperPage = () => {
         }
     };
 
+    //Modal add dev
+    const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
+    const [newDeveloper, setNewDeveloper] = useState<Developer | null>(null);
+
+    const filteredDevelopers = developers.filter(dev =>
+        dev.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    //Modal confirmar exclusão
+    const { isOpen: isModalExcOpen, onOpen: onModalExcOpen, onClose: onModalExcClose } = useDisclosure();
+
+    //Delete handler
     const confirmDelete = () => {
         alert('Deletado!')
         onModalExcClose();
@@ -120,6 +122,7 @@ const DeveloperPage = () => {
             {/* Modal Confirmar exclusão */}
             <CustomModal
                 title="Atenção!"
+                mainButtonTitle='Sim'
                 isOpen={isModalExcOpen}
                 onClose={onModalExcClose}
                 onSave={confirmDelete}
@@ -131,6 +134,7 @@ const DeveloperPage = () => {
             {/* Modal editar Dev */}
             <CustomModal
                 title="Editar Desenvolvedor"
+                mainButtonTitle='Salvar'
                 isOpen={isOpen}
                 onClose={onClose}
                 onSave={() => handleSaveEdit(
@@ -185,6 +189,7 @@ const DeveloperPage = () => {
             {/*Modal Add Dev*/}
             <CustomModal
                 title="Cadastrar Desenvolvedor"
+                mainButtonTitle='Salvar'
                 isOpen={isAddOpen}
                 onClose={onAddClose}
                 onSave={() => {

@@ -32,13 +32,13 @@ const DeveloperCard = ({ name, level, sexo, birth_date, hobby, onEdit, onDelete 
                     </Stack>
                 </HStack>
                 <Card.Description>
-                    <Strong color="fg">{name}. </Strong>
+                    <Strong color="fg">{name} </Strong>
                     <br></br>
                     Desenvolvedor {level}
                     <br></br>
-                    Sexo: {sexo}.
+                    Sexo: {sexo}
                     <br></br>
-                    Data de nascimento: {birth_date}.
+                    Data de nascimento: {birth_date}
                     <br></br>
                     Principal hobby: {hobby}
                 </Card.Description>

@@ -2,10 +2,8 @@
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/tabs';
 import { Box } from '@chakra-ui/react';
-
 import DeveloperPage from './desenvolvedores/page'; // Importando a página de desenvolvedores
 import LevelPage from './niveis/page'; // Importando a página de níveis
-import { GiTreeSwing } from 'react-icons/gi';
 
 const MainPage = () => {
   return (

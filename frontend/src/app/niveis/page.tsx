@@ -37,6 +37,14 @@ const LevelPage = () => {
     const [newLevelName, setNewLevelName] = useState<string>('');
     const [newDevelopersCount, setNewDevelopersCount] = useState<number>(0);
 
+    //Modal confirmar exclusão
+    const { isOpen: isModalExcOpen, onOpen: onModalExcOpen, onClose: onModalExcClose } = useDisclosure();
+
+    const confirmDelete = () => {
+        alert('Deletado!')
+        onModalExcClose();
+    };
+
     //Barra Busca
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -146,16 +154,29 @@ const LevelPage = () => {
                             <Table.Cell>{item.developersCount}</Table.Cell>
                             <Table.Cell>
                                 <GenericButton size='sm' variant='subtle' title="Editar" color="blue" onClick={() => handleEdit(item)} />
-                                <GenericButton size='sm' variant='ghost' title="Excluir" color="red" onClick={() => handleDelete(item.id)} />
+                                <GenericButton size='sm' variant='ghost' title="Excluir" color="red" onClick={onModalExcOpen} />
                             </Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>
             </Table.Root>
 
+            {/* Modal Confirmar exclusão */}
+            <CustomModal
+                title="Atenção!"
+                mainButtonTitle='Sim'
+                isOpen={isModalExcOpen}
+                onClose={onModalExcClose}
+                onSave={confirmDelete}
+                body={
+                    <Text>Tem certeza que deseja remover PERMANENTEMENTE o nivel selecionado?</Text>
+                }
+            />
+
             {/* Modal Editar Nivel */}
             <CustomModal
                 title="Editar Nível"
+                mainButtonTitle='Salvar'
                 isOpen={isOpen}
                 onClose={onClose}
                 onSave={handleSave}
@@ -178,10 +199,10 @@ const LevelPage = () => {
             {/* Modal Adicionar Nivel*/}
             <CustomModal
                 title="Cadastrar Novo Nível"
+                mainButtonTitle='Salvar'
                 isOpen={isAddOpen}
                 onClose={() => {
                     setNewLevelName('');
-                    setNewDevelopersCount(0);
                     onAddClose();
                 }}
                 onSave={() => {
