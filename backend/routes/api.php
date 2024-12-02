@@ -26,11 +26,14 @@ Route::delete('/desenvolvedores/{id}', [DeveloperController::class, 'excludeDevs
 //Criar nivel
 Route::post('/niveis', [LevelController::class, 'store']);
 
+//Desenvolvedores por Nível
+Route::get('/dev-count', [LevelController::class, 'developersCount']);
+
 //Listar níveis
 Route::get('/niveis', [LevelController::class, 'listLevels']);
 
 //Atualizar níveis
 Route::put('/niveis/{id}', [LevelController::class, 'updateLevels']);
 
-//Excluir n;iveis
+//Excluir niveis
 Route::delete('/niveis/{id}', [LevelController::class, 'excludeLevels']);

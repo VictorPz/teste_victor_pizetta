@@ -1,4 +1,4 @@
-import api from "@/api/axiosconfig";
+import api from "@/api/axiosConfig";
 import { useState, useEffect } from "react";
 import { Box, Button,Input, Stack, Text, HStack} from '@chakra-ui/react';
 import { Toaster, toaster } from "@/components/ui/toaster"
@@ -44,7 +44,7 @@ const CustomDevelopersView = () => {
             const response = await api.get<ApiResponse>("/desenvolvedores", {params:{ page }});
             setDevelopers(response.data.data);
             setMeta(response.data.meta)
-         } catch (error: any) {
+        } catch (error: any) {
             const errorMessage = error.response?.data.message || "Erro desconhecido ao adicionar desenvolvedor."
             toaster.create({
                 title: 'Erro ao editar:',

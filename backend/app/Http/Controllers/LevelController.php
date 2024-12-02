@@ -6,8 +6,6 @@ use App\Models\Level;
 use App\Http\Requests\LevelFormValidator;
 use Illuminate\Support\Facades\DB;
 
-use function PHPUnit\Framework\isEmpty;
-
 class LevelController extends Controller
 {
     // Criar um novo nível
@@ -81,6 +79,12 @@ class LevelController extends Controller
         }
 
         return response()->json(['message' => 'Nível excluído com sucesso']);
+    }
+
+    public function developersCount() {
+        //Quantidade de Desenvolvedores associada em um nivel
+        $levels = Level::withCount('desenvolvedores')->get();
+        return response()->json(['data' => $levels]);
     }
 }
 

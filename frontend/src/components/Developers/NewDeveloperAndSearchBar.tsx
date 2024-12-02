@@ -3,7 +3,7 @@ import { Box, Input} from "@chakra-ui/react";
 import { createListCollection } from "@chakra-ui/react"
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import api from "@/api/axiosconfig";
+import api from "@/api/axiosConfig";
 import {
     SelectContent,
     SelectItem,
