@@ -16,7 +16,7 @@ WORKDIR /app/backend
 # Copiar os arquivos do projeto
 COPY . .
 
-# Comando padrão para iniciar o servidor (alterando o host para 0.0.0.0)
+# Comando padrão para iniciar o servidor
 CMD php artisan serve --host=0.0.0.0 --port=8000
 
 # Expor a porta 8000
