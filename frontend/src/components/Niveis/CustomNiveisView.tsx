@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/field"
 import CustomModal from '@/components/CustomModal';
 import GenericButton from '@/components/GenericButton';
 import api from '@/api/axiosConfig'; // Importe o Axios
+import { title } from 'process';
 
 export type Level = {
     id: number;
@@ -224,7 +225,7 @@ const LevelPage = () => {
                 <GenericButton size="lg" variant="subtle" title="Adicionar Nível" color="blue" onClick={onAddOpen} />
             </Box>
             <Box w="95%">
-                <Table.Root stickyHeader>
+                <Table.Root stickyHeader interactive>
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeader onClick={() => handleSort('nivel')} cursor="pointer">
@@ -311,15 +312,19 @@ const LevelPage = () => {
             {/* Controles de Paginação */}
             <HStack mt={4}>
                 <Button
+                    backgroundColor='#36373b'
+                    color='#F8F8FF'
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
                     Anterior
                 </Button>
-                <Text>
+                <Text fontSize='lg' color='#141723'>
                     Página {currentPage} de {lastPage}
                 </Text>
                 <Button
+                    backgroundColor='#36373b'
+                    color='#F8F8FF'
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === lastPage}
                 >

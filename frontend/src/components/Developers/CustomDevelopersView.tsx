@@ -8,7 +8,6 @@ import dayjs from 'dayjs';
 import DeveloperCard from '@/components/DeveloperCard';
 import NewDeveloperAndSearchBar from "./NewDeveloperAndSearchBar";
 import CustomModal from '@/components/CustomModal';
-import GenericButton from "../GenericButton";
 
 type Level = {
     id: number;
@@ -193,17 +192,19 @@ const CustomDevelopersView = () => {
                 <Box display="flex" justifyContent="center" mt="4">
                     <HStack>
                         <Button
-                            colorScheme="teal"
+                            backgroundColor='#36373b'
+                            color='#F8F8FF'
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
                         >
                             Anterior
                         </Button>
-                        <Text fontSize="lg" fontWeight="bold">
+                        <Text fontSize="lg" color='#141723'>
                             Página {currentPage} de {meta.last_page || 1}
                         </Text>
                         <Button
-                            colorScheme="teal"
+                            backgroundColor='#36373b'
+                            color='#F8F8FF'
                             disabled={currentPage === meta.last_page || (meta.total <= currentPage * meta.per_page)}
                             onClick={() => handlePageChange(currentPage + 1)}
                         >

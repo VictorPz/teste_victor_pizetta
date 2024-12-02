@@ -16,7 +16,7 @@ type CustomCardProps = {
 
 const DeveloperCard = ({ name, level, sexo, birth_date, idade, hobby, onEdit, onDelete }: CustomCardProps) => {
     return (
-        <Card.Root width="325px" m='10px'>
+        <Card.Root backgroundColor='#141723' width="325px" m='10px'>
             <Card.Body>
                 <HStack mb="6" gap="3">
                     <Avatar

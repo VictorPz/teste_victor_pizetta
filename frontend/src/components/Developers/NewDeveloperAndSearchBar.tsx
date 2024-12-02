@@ -150,14 +150,14 @@ const NewDeveloperAndSearchBar = ({ onDevelopersUpdate }: { onDevelopersUpdate: 
                 collection={busca}
                 size='md'
                 w='150px'
-                backgroundColor='#111111'
+                backgroundColor='#141723'
                 borderRadius='8px'
                 onChange={(e: any) => setSearchField(e.target.value)}
                 >
                     <SelectTrigger>
                         <SelectValueText placeholder="Busca por:" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent backgroundColor='#141723'>
                         {busca.items.map((buscaItem) => (
                             <SelectItem key={buscaItem.value} item={buscaItem}>
                                 {buscaItem.label}

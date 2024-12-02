@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/modal';
-import { Box, Button} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import GenericButton from '@/components/GenericButton';
 
 interface CustomModalProps {
