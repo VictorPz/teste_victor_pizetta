@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Box, Button,Input, Stack, Text, HStack} from '@chakra-ui/react';
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { useDisclosure } from '@chakra-ui/hooks'
+import { Field } from "@/components/ui/field"
 import dayjs from 'dayjs';
 import DeveloperCard from '@/components/DeveloperCard';
 import NewDeveloperAndSearchBar from "./NewDeveloperAndSearchBar";
@@ -193,7 +194,6 @@ const CustomDevelopersView = () => {
                     <HStack>
                         <Button
                             colorScheme="teal"
-                            variant="outline"
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
                         >
@@ -204,7 +204,6 @@ const CustomDevelopersView = () => {
                         </Text>
                         <Button
                             colorScheme="teal"
-                            variant="outline"
                             disabled={currentPage === meta.last_page || (meta.total <= currentPage * meta.per_page)}
                             onClick={() => handlePageChange(currentPage + 1)}
                         >
@@ -235,33 +234,42 @@ const CustomDevelopersView = () => {
                 onSave={handleEditDeveloper}
                 body={
                     <>
-                        <Text>Nome:</Text>
+                        <Field label="Nome:" required>
                         <Input
                             value={updatedDeveloper?.nome || ''}
                             onChange={(e) => setUpdatedDeveloper(prev => prev ? { ...prev, nome: e.target.value } : prev)}
                         />
-                        <Text>Sexo:</Text>
+                        </Field>
+
+                        <Field label="Sexo:" required>
                         <Input
                             value={updatedDeveloper?.sexo || ''}
                             onChange={(e) => setUpdatedDeveloper(prev => prev ? { ...prev, sexo: e.target.value } : prev)}
                         />
-                        <Text>Data de Nascimento:</Text>
+                        </Field>
+
+                        <Field label="Data de nascimento:" required>
                         <Input
                             type="date"
                             value={updatedDeveloper?.data_nascimento || ''}
                             onChange={(e) => setUpdatedDeveloper(prev => prev ? { ...prev, data_nascimento: e.target.value } : prev)}
                         />
-                        <Text>Hobby:</Text>
+                        </Field>
+
+                        <Field label="Hobby:" required>
                         <Input
                             value={updatedDeveloper?.hobby || ''}
                             onChange={(e) => setUpdatedDeveloper(prev => prev ? { ...prev, hobby: e.target.value } : prev)}
                         />
-                        <Text>Nível:</Text>
+                        </Field>
+
+                        <Field label="Nivel:" required>
                         <Input
                             type="number"
                             value={updatedDeveloper?.nivel.id || ''}
                             onChange={(e) => setUpdatedDeveloper(prev => prev ? { ...prev, nivel: { id: parseInt(e.target.value), nivel: '' } } : prev)}
                         />
+                        </Field>
                     </>
                 }
             />

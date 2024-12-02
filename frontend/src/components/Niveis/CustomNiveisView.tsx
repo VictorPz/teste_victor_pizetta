@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Box, Table, Input, Text} from '@chakra-ui/react';
+import { Box, Table, Input, Text, HStack, Button} from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { LuArrowUpDown } from 'react-icons/lu';
 import { Toaster, toaster } from "@/components/ui/toaster"
+import { Field } from "@/components/ui/field"
 import CustomModal from '@/components/CustomModal';
 import GenericButton from '@/components/GenericButton';
 import api from '@/api/axiosConfig'; // Importe o Axios
@@ -27,14 +28,24 @@ const LevelPage = () => {
     //Busca
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const fetchLevels = async () => {
+    //Paginação
+    const [currentPage, setCurrentPage] = useState<number>(1); // Página atual
+    const [lastPage, setLastPage] = useState<number>(1); // Última página
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const fetchLevels = async (page: number = 1) => {
+        setIsLoading(true);
         try {
-            // Primeira requisição: buscar os níveis
             const levelsResponse = await api.get('/niveis', {
                 params: {
                     nivel: searchQuery,
-                }
+                    page,
+                },
             });
+
+            setLevels(levelsResponse.data.data);
+            setCurrentPage(levelsResponse.data.meta.current_page);
+            setLastPage(levelsResponse.data.meta.last_page);
 
             // Segunda requisição: buscar a contagem de desenvolvedores
             const developersCountResponse = await api.get('/dev-count'); // Usando a rota correta para contagem de desenvolvedores
@@ -58,13 +69,15 @@ const LevelPage = () => {
                 description: errorMessage,
                 type: "error",
             });
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
         if (searchQuery.trim() === '') {
             // Caso a barra de busca esteja vazia, retorna todos os níveis
-            fetchLevels();
+            fetchLevels(currentPage);
         } else {
             // Filtra localmente os níveis com base na busca
             const filtered = levels.filter(level =>
@@ -72,7 +85,7 @@ const LevelPage = () => {
             );
             setLevels(filtered);
         }
-    }, [searchQuery]);
+    }, [currentPage, searchQuery]);
 
     //OrdenaÇão da Tabela
     const handleSort = (column: 'nivel' | 'developersCount') => {
@@ -105,6 +118,7 @@ const LevelPage = () => {
             })
             setNewLevelName('');
             onAddClose();
+            fetchLevels(currentPage);
         } catch (error: any) {
             console.log('cai no catch de erro ao dd level')
             const errorMessage = error.response?.data.message || "Erro desconhecido";
@@ -189,6 +203,11 @@ const LevelPage = () => {
         level.nivel.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handlePageChange = (page: number) => {
+        if (page < 1 || page > lastPage) return; // Evita navegação para páginas inválidas
+        setCurrentPage(page);
+    };
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" p="25px" gap="4">
             <Box display="flex" justifyContent="space-between" gap="20" w="95%">
@@ -244,11 +263,13 @@ const LevelPage = () => {
                 mainButtonTitle="Salvar"
                 body={
                     <Box display="flex" flexDirection="column" gap="4">
-                        <Input
-                            placeholder="Nome do Nível:"
-                            value={newLevelName}
-                            onChange={(e) => setNewLevelName(e.target.value)}
-                        />
+                        <Field label="Nivel" required>
+                            <Input
+                                placeholder="Nome do Nível:"
+                                value={newLevelName}
+                                onChange={(e) => setNewLevelName(e.target.value)}
+                            />
+                        </Field>
                     </Box>
                 }
                 isOpen={isAddOpen}
@@ -265,11 +286,12 @@ const LevelPage = () => {
                 onSave={handleEditLevel}
                 body={
                     <>
-                        <Text>Novo Nivel:</Text>
-                        <Input
-                            value={updatedLevel?.nivel || ''}
-                            onChange={(e) => setUpdatedLevel(prev => prev ? { ...prev, nivel: e.target.value } : prev)}
-                        />
+                        <Field label="Novo Nivel:" required>
+                            <Input
+                                value={updatedLevel?.nivel || ''}
+                                onChange={(e) => setUpdatedLevel(prev => prev ? { ...prev, nivel: e.target.value } : prev)}
+                            />
+                        </Field>
                     </>
                 }
             />
@@ -285,6 +307,25 @@ const LevelPage = () => {
                     <Text>Tem certeza que deseja remover PERMANENTEMENTE o nivel selecionado?</Text>
                 }
             />
+
+            {/* Controles de Paginação */}
+            <HStack mt={4}>
+                <Button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Anterior
+                </Button>
+                <Text>
+                    Página {currentPage} de {lastPage}
+                </Text>
+                <Button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === lastPage}
+                >
+                    Próxima
+                </Button>
+            </HStack>
 
             <Toaster/>
         </Box>

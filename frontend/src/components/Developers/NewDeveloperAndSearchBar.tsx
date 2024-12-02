@@ -12,6 +12,7 @@ import {
     SelectValueText,
 } from "@/components/ui/select"
 import { Toaster, toaster } from "@/components/ui/toaster"
+import { Field } from "@/components/ui/field"
 import GenericButton from "@/components/GenericButton";
 import CustomModal from "@/components/CustomModal";
 
@@ -181,33 +182,47 @@ const NewDeveloperAndSearchBar = ({ onDevelopersUpdate }: { onDevelopersUpdate: 
                 mainButtonTitle="Salvar"
                 body={
                     <Box display="flex" flexDirection="column" gap="4">
+                        <Field label="Nome:" required>
                         <Input
                             placeholder="Nome"
                             value={newDeveloper.nome}
                             onChange={(e) => setNewDeveloper({ ...newDeveloper, nome: e.target.value })}
                         />
+                        </Field>
+
+                        <Field label="Sexo:" required>
                         <Input
                             placeholder="Sexo (M/F)"
                             value={newDeveloper.sexo}
                             onChange={(e) => setNewDeveloper({ ...newDeveloper, sexo: e.target.value })}
                         />
+                        </Field>
+
+                        <Field label="Data de Nascimento:" required>
                         <Input
                             type="date"
                             placeholder="Data de Nascimento"
                             value={newDeveloper.data_nascimento}
                             onChange={(e) => setNewDeveloper({ ...newDeveloper, data_nascimento: e.target.value })}
                         />
+                        </Field>
+
+                        <Field label="Hobby:" required>
                         <Input
                             placeholder="Hobby"
                             value={newDeveloper.hobby}
                             onChange={(e) => setNewDeveloper({ ...newDeveloper, hobby: e.target.value })}
                         />
+                        </Field>
+
+                        <Field label="Nível:" required>
                         <Input
                             type="number" // Garante que o input será numérico
                             placeholder="ID do Nível"
                             value={newDeveloper.nivel_id}
                             onChange={(e) => setNewDeveloper({ ...newDeveloper, nivel_id: e.target.value })}
                         />
+                        </Field>
                     </Box>
                 }
                 isOpen={isAddModalOpen}
