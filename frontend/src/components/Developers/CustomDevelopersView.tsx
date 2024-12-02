@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import DeveloperCard from '@/components/DeveloperCard';
 import NewDeveloperAndSearchBar from "./NewDeveloperAndSearchBar";
 import CustomModal from '@/components/CustomModal';
+import GenericButton from "../GenericButton";
 
 type Level = {
     id: number;

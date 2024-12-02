@@ -94,17 +94,25 @@ const LevelPage = () => {
 
     // Adicionar um novo nível
     const handleAddLevel = async () => {
-        if (newLevelName.trim()) {
-            try {
-                const response = await api.post('/niveis', {
-                    nivel: newLevelName,
-                });
-                setLevels((prevLevels) => [...prevLevels, response.data]); // Adiciona o novo nível
-                setNewLevelName('');
-                onAddClose();
-            } catch (error) {
-                console.error('Erro ao adicionar nível:', error);
-            }
+        try {
+            const response = await api.post('/niveis', {
+                nivel: newLevelName,
+            });
+            setLevels((prevLevels) => [...prevLevels, response.data]); // Adiciona o novo nível
+            toaster.create({
+                title: 'Nível adicionado com sucesso!',
+                type: 'success',
+            })
+            setNewLevelName('');
+            onAddClose();
+        } catch (error: any) {
+            console.log('cai no catch de erro ao dd level')
+            const errorMessage = error.response?.data.message || "Erro desconhecido";
+            toaster.create({
+                title: "Falha ao adicionar nivel:",
+                description: errorMessage,
+                type: "error",
+            });
         }
     };
 
