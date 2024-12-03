@@ -41,6 +41,7 @@ docker-compose up --build -d
   Hobby: Marcenaria,
   Nivel: 1
 ```
+- Atenção: Verifique se todas as migrations ja foram realizadas no container Laravel no docker (backend). Ocorreu algumas vezes dele iniciar antes do banco de dados, impossibilitando de fazer as migrations e por consequência interagir com o front. Neste caso, rode o container do backend novamente e ele fará as migrations como deve.
 
 ## 💻 Acesse o host para ver o projeto:
 
