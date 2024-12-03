@@ -28,6 +28,20 @@ Volte para a pasta raiz onde se encontra o docker compose e rode o seguinte coma
 docker-compose up --build -d
 ```
 
+### ⚠️ Importante:
+
+ - **Antes** de tentar criar um desenvolvedor, **crie primeiro** um novo nível na página de níveis.
+- Ao criar um novo desenvolvedor **informe o nível como id** (número inteiro) como no exemplo abaixo:
+- O campo "sexo" somente aceitará os caracteres únicos **M ou F**.
+
+```
+  Nome: Marcos Antonio,
+  Sexo: M,
+  Data de nascimento: 15/08/1995,
+  Hobby: Marcenaria,
+  Nivel: 1
+```
+
 ## 💻 Acesse o host para ver o projeto:
 
 http://localhost:3000
@@ -36,7 +50,7 @@ http://localhost:3000
 
 Para maiores informações da api acesse o swagger abaixo:
 
-- [link]
+- [Swagger API Documentation](https://app.swaggerhub.com/apis-docs/VictorPizetta/Desafio_Gazin/1.0.0#/)
 
 ---
 
